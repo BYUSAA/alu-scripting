@@ -63,7 +63,7 @@ To clone this repository and start using the scripts:
     ```
 ### Author
 
-This collection of scripts was created by **byuussaa (Loue Sauveur Christian)**.
+This collection of scripts was created by **byuussaa**.
 
 ### Contribution
 
