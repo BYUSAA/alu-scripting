@@ -1,19 +1,29 @@
-#!/usr/bin/python3
-"""
-function that queries the 'Reddit API'
-and prints the titles of the first 10 hot posts listed for a given subreddit.
-"""
-import requests
-
+import praw
+from prawcore.exceptions import NotFound, Redirect
 
 def top_ten(subreddit):
-    """ prints the titles of the first 10 hot posts listed in a subreddit """
-    url = 'https://oauth.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if response.status_code != 200:
+    # Initialize a Reddit instance
+    reddit = praw.Reddit(
+        client_id="your_client_id",
+        client_secret="your_client_secret",
+        user_agent="your_user_agent"
+    )
+    
+    try:
+        # Get the subreddit
+        subreddit = reddit.subreddit(subreddit)
+        
+        # Fetch the top 10 hot posts
+        hot_posts = subreddit.hot(limit=10)
+        
+        # Print the titles of the hot posts
+        for post in hot_posts:
+            print(post.title)
+    
+    except (NotFound, Redirect):
+        # Handle invalid subreddit
         print(None)
-        return
-    posts = response.json()['data']['children']
-    for post in posts:
-        print(post['data']['title'])
+    except Exception as e:
+        # Handle any other exceptions
+        print(f"An error occurred: {e}")
+
