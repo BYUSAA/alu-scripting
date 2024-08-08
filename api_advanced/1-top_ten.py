@@ -1,29 +1,40 @@
-import praw
-from prawcore.exceptions import NotFound, Redirect
+import requests
 
 def top_ten(subreddit):
-    # Initialize a Reddit instance
-    reddit = praw.Reddit(
-        client_id="your_client_id",
-        client_secret="your_client_secret",
-        user_agent="your_user_agent"
-    )
-    
-    try:
-        # Get the subreddit
-        subreddit = reddit.subreddit(subreddit)
-        
-        # Fetch the top 10 hot posts
-        hot_posts = subreddit.hot(limit=10)
-        
-        # Print the titles of the hot posts
-        for post in hot_posts:
-            print(post.title)
-    
-    except (NotFound, Redirect):
-        # Handle invalid subreddit
-        print(None)
-    except Exception as e:
-        # Handle any other exceptions
-        print(f"An error occurred: {e}")
+    """
+    Queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit.
 
+    Args:
+        subreddit (str): The subreddit to query.
+
+    Returns:
+        None
+    """
+    # Set the API endpoint URL
+    url = f"https://oauth.reddit.com/r/{subreddit}/hot"
+
+    # Set the API request headers
+    headers = {
+        "User-Agent": "My Reddit API Client"
+    }
+
+    # Send a GET request to the API endpoint
+    response = requests.get(url, headers=headers)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the JSON response
+        data = response.json()
+
+        # Check if the subreddit is valid
+        if "data" in data and "children" in data["data"]:
+            # Extract the post titles
+            post_titles = [post["data"]["title"] for post in data["data"]["children"][:10]]
+
+            # Print the post titles
+            for title in post_titles:
+                print(title)
+        else:
+            print(None)
+    else:
+        print(None)
