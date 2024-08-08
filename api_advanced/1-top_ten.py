@@ -1,40 +1,24 @@
+#!/usr/bin/python3
+"""Script that fetch 10 hot post for a given subreddit."""
 import requests
 
+
 def top_ten(subreddit):
-    """
-    Queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit.
+    """Return number of subscribers if @subreddit is valid subreddit.
+    if not return 0."""
 
-    Args:
-        subreddit (str): The subreddit to query.
+    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
+    response = requests.get(subreddit_url, headers=headers)
 
-    Returns:
-        None
-    """
-    # Set the API endpoint URL
-    url = f"https://oauth.reddit.com/r/{subreddit}/hot"
-
-    # Set the API request headers
-    headers = {
-        "User-Agent": "My Reddit API Client"
-    }
-
-    # Send a GET request to the API endpoint
-    response = requests.get(url, headers=headers)
-
-    # Check if the request was successful
     if response.status_code == 200:
-        # Parse the JSON response
-        data = response.json()
-
-        # Check if the subreddit is valid
-        if "data" in data and "children" in data["data"]:
-            # Extract the post titles
-            post_titles = [post["data"]["title"] for post in data["data"]["children"][:10]]
-
-            # Print the post titles
-            for title in post_titles:
-                print(title)
-        else:
-            print(None)
+        json_data = response.json()
+        for i in range(10):
+            print(
+                json_data.get('data')
+                .get('children')[i]
+                .get('data')
+                .get('title')
+            )
     else:
         print(None)
