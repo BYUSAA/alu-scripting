@@ -14,21 +14,19 @@ def top_ten(subreddit):
         subreddit (str): The name of the subreddit to query.
     """
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
     
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         
         if response.status_code == 200:
-            data = response.json()
-            posts = data.get("data", {}).get("children", [])
-            
-            if len(posts) == 0:
+            posts = response.json().get("data", {}).get("children", [])
+            if not posts:
                 print(None)
             else:
                 for post in posts[:10]:
                     print(post.get("data", {}).get("title"))
         else:
             print(None)
-    except Exception as e:
+    except Exception:
         print(None)
