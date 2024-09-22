@@ -6,5 +6,3 @@ This alu-scripting repository is a collection of Ruby scripts utilizing regular 
 ### Author
 
 This collection of scripts was created by Me **BYUSAA**.
-
-### Contribution
