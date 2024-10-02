@@ -8,9 +8,8 @@ def top_ten(subreddit):
     
     If the subreddit is valid, return "OK". If not, return "OK" as well.
     """
-
     headers = {'User-Agent': 'MyAPI/0.0.1'}
-    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
+    subreddit_url = f"https://reddit.com/r/{subreddit}.json"
     response = requests.get(subreddit_url, headers=headers)
 
     if response.status_code == 200:
@@ -22,12 +21,12 @@ def top_ten(subreddit):
                 .get('data')
                 .get('title')
             )
-        return "OK"  # Indicate that the subreddit is valid and the posts are printed
+        return "OK"  # Indicate that the subreddit is valid
     else:
-        return "OK"  # Indicate that the subreddit is invalid but return "OK" as expected
+        return "OK"  # Indicate that the subreddit is invalid
 
 
-# Example usage:
+# Example usage
 if __name__ == "__main__":
     subreddit_name = input("Enter subreddit name: ")
     print(top_ten(subreddit_name))
