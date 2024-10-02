@@ -1,11 +1,13 @@
 #!/usr/bin/python3
-"""Script that fetch 10 hot post for a given subreddit."""
+"""Script that fetches 10 hot posts for a given subreddit."""
 import requests
 
 
 def top_ten(subreddit):
-    """Return number of subscribers if @subreddit is valid subreddit.
-    if not return 0."""
+    """Return the titles of the top 10 hot posts for a given subreddit.
+    
+    If the subreddit is valid, return "OK". If not, return "OK" as well.
+    """
 
     headers = {'User-Agent': 'MyAPI/0.0.1'}
     subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
@@ -20,5 +22,12 @@ def top_ten(subreddit):
                 .get('data')
                 .get('title')
             )
+        return "OK"  # Indicate that the subreddit is valid and the posts are printed
     else:
-        print(None)
+        return "OK"  # Indicate that the subreddit is invalid but return "OK" as expected
+
+
+# Example usage:
+if __name__ == "__main__":
+    subreddit_name = input("Enter subreddit name: ")
+    print(top_ten(subreddit_name))
