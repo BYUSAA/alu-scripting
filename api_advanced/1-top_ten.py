@@ -1,26 +1,24 @@
 #!/usr/bin/python3
-"""Prints the title of the first 10 hot posts listed for a given subreddit"""
-
+"""Script that fetch 10 hot post for a given subreddit."""
 import requests
 
+
 def top_ten(subreddit):
-    """Main function to print the titles of the top 10 hot posts in a subreddit."""
-    URL = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    HEADERS = {"User-Agent": "PostmanRuntime/7.35.0"}
+    """Return number of subscribers if @subreddit is valid subreddit.
+    if not return 0."""
 
-    try:
-        # Make the request and only proceed if the status code is 200 (OK)
-        RESPONSE = requests.get(URL, headers=HEADERS, allow_redirects=False)
-        if RESPONSE.status_code == 200:
-            HOT_POSTS = RESPONSE.json().get("data", {}).get("children", [])
+    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
+    response = requests.get(subreddit_url, headers=headers)
 
-            if HOT_POSTS:
-                for post in HOT_POSTS:
-                    print(post.get("data", {}).get("title"))
-            else:
-                print(None)  # No posts found
-        else:
-            print(None)  # Subreddit does not exist or request failed
-    except Exception:
-        print(None)  # Catch any other exceptions and return None
-
+    if response.status_code == 200:
+        json_data = response.json()
+        for i in range(10):
+            print(
+                json_data.get('data')
+                .get('children')[i]
+                .get('data')
+                .get('title')
+            )
+    else:
+        print(None)
